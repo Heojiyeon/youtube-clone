@@ -6,7 +6,7 @@
     "url": "git+https://github.com/Heojiyeon/youtube-clone.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node index.js"
+    "dev": "nodemon --exec babel-node src/server.js"
   },
   "author": "Zena",
   "license": "MIT",
