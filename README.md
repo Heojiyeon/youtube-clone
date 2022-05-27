@@ -1,8 +1,9 @@
-* global router
-/ -> Home
-/join -> Join
-/login -> Login
-/search -> Search
+## Sepertate routers
+* global router   
+/ -> Home   
+/join -> Join   
+/login -> Login   
+/search -> Search   
 
 * users   
 /users/:id ->See User   
