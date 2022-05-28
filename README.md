@@ -7,11 +7,11 @@
 
 * users   
 /users/:id ->See User   
-/users/logout -> Logout
-/users/edit -> Edit Profile
-/users/delete -> Delete Profile
+/users/logout -> Logout   
+/users/edit -> Edit Profile   
+/users/delete -> Delete Profile   
 
-* videos
+* videos   
 /videos/:id -> See Video   
 /videos/:id/edit -> Edit Video   
 /videos/:id/delete -> Delete Video   
