@@ -8,7 +8,11 @@ html(lang="en")
         title #{pageTitle} | Wetube
     body 
         header 
-            h1=pageTitle
+            h1=pageTitle 
+            nav 
+                ul 
+                    li 
+                        a(href="/videos/upload") Upload Video 
             main 
                 block content
     include partials/footer
