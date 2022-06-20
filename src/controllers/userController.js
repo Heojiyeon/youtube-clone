@@ -1,5 +1,6 @@
 import User from '../models/User';
 import bcrypt from 'bcrypt';
+import session from 'express-session';
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -33,7 +34,7 @@ export const postJoin = async (req, res) => {
 };
 export const getLogin = (req, res) => {
     res.render("login", { pageTitle: "Login" });
-}
+};
 export const postLogin = async (req, res) => {
     const { username, password } = req.body;
     const pageTitle = "Login";
@@ -49,7 +50,49 @@ export const postLogin = async (req, res) => {
     req.session.user = user;
     return res.redirect("/");
 };
-export const edit = (req, res) => res.send("Edit");
-export const remove = (req, res) => res.send("Remove");
+export const getEdit = (req, res) => {
+    return res.render("edit-profile", { pageTitle: "Edit Profile" });
+}
+export const postEdit = async (req, res) => {
+    const {
+        session: { user: { _id }, },
+        body: { name, email, username, location }
+    } = req;
+    const updatedUser = await User.findByIdAndUpdate(_id,
+        { name, email, username, location },
+        { new: true });
+    req.session.user = updatedUser;
+    return res.render("edit-profile");
+}
+export const getChangePassword = (req, res) => {
+    return res.render("change-password", { pageTitle: "Change Password" });
+}
+export const postChangePassword = async (req, res) => {
+    const {
+        session: { user: { _id, password }, },
+        body: { oldPassword, newPassword, newPasswordConfirmation }
+    } = req;
+    const ok = await bcrypt.compare(oldPassword, password);
+    if (!ok) {
+        return res.status(400).render("change-password", {
+            pageTitle: "Change Password",
+            errorMessage: "The password is incorrect",
+        });
+    }
+    const user = await User.findById(_id);
+    user.password = newPassword;
+    await user.save();
+    req.session.user.password = user.password;
+    if (newPassword !== newPasswordConfirmation) {
+        return res.status(400).render("change-password", {
+            pageTitle: "Change Password",
+            errorMessage: "The password does not match the confirmation",
+        });
+    }
+    return res.redirect("logout");
+}
 export const see = (req, res) => res.send("See");
-export const logout = (req, res) => res.send("Logout");
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+}
